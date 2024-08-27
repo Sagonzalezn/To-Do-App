@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: cd app
+          command: cd app && pwd
       - run:
           name: Install dependencies
           command: yarn install
