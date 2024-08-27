@@ -19,7 +19,7 @@ jobs:
           command: cd app && pwd && ls
       - run:
           name: Install dependencies
-          command: yarn install
+          command: ls && yarn install
       - run:
           name: Run tests
           command: yarn test
