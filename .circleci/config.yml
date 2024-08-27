@@ -15,4 +15,9 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - run: node --version
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - run:
+          name: Run tests
+          command: yarn test
