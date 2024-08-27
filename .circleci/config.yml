@@ -23,15 +23,14 @@ jobs:
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
-    working_directory: /app
     steps:
       - checkout
       - run:
           name: Install dependencies
-          command: yarn install
+          command: cd app && yarn install
       - run:
           name: Run tests
-          command: yarn test
+          command: cd app &&  yarn test
       - run:
           name: Run Commit Command
           command: echo "commiting changes"
