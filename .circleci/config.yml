@@ -16,10 +16,8 @@ jobs:
     steps:
       - checkout
       - run:
-          command: cd app && pwd && ls
-      - run:
           name: Install dependencies
-          command: ls && yarn install
+          command: cd app && yarn install
       - run:
           name: Run tests
-          command: yarn test
+          command: cd app && yarn test
