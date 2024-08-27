@@ -4,7 +4,7 @@ workflows:
   test-app:
     jobs:
       - test:
-          context: env
+          context: env #contexto para variables de entorno
 
 jobs:
   test:
