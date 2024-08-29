@@ -14,6 +14,8 @@ workflows:
       - build_and_test:
           context: env # context for environment variables
       - push:
+          requires:
+            - build_and_test
           filters:
             branches:
               only:
@@ -71,7 +73,8 @@ jobs:
           command: |
             TAG=${CIRCLE_TAG:-${CIRCLE_SHA1:-latest}}
             echo "Using Docker tag: $TAG"
-            docker build -t sagonzalezn/vagrant-node:$TAG node:12-alpine
+            docker pull node:12-alpine
+            docker build -t sagonzalezn/vagrant-node:$TAG node
       - run:
           name: Push Docker image to dockerhub
           command: |
