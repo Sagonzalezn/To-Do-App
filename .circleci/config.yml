@@ -57,7 +57,7 @@ jobs:
   
   deploy:
     docker:
-      image: circleci/python:3.8
+      - image: ubuntu:latest
     steps:
       - add_ssh_keys:
           fingerprints:
