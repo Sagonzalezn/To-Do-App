@@ -71,9 +71,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            OLD_TAG=$(cat VERSION.txt)
-            echo "Current version is: $OLD_TAG"
-            TAG=$(echo $OLD_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+            TAG=$(cat VERSION.txt)
             echo "New version is: $TAG"
             docker build -t sagonzalezn/vagrant-node:$TAG ./app
       - run:
