@@ -64,6 +64,9 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
+          name: Install docker
+          command: apt update && apt install docker
+      - run:
           name: Build Docker image
           command: docker build -t sagonzalezn/vagrant-node:${CIRCLE_TAG} node:12-alpine
       - run:
