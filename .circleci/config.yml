@@ -30,15 +30,15 @@ workflows:
                 - main
     jobs:
       - build_and_test
-  build_and_deploy:
-    jobs:
-      - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only: main
+  #build_and_deploy:
+  #  jobs:
+  #    - build_and_test
+  #    - deploy:
+  #        requires:
+  #          - build_and_test
+  #        filters:
+  #          branches:
+  #            only: main
 
 jobs:
   build_and_test:
@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            OLDTAG=$(cat ./app/VERSION)
+            OLDTAG=$(cat VERSION)
             echo "Current version is: $OLD_TAG"
             TAG=$(echo $OLD_VERSION | awk -F. -v OFS=. '{$NF++;print}')
             echo "New version is: $TAG"
