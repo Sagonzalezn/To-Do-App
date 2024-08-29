@@ -11,9 +11,9 @@ on:
 workflows:
   build_test:
     jobs:
-      - build_and_test:
-          context: env # context for environment variables
+      - build_and_test
       - push:
+          context: env #contexto para variables de entorno
           requires:
             - build_and_test
           filters:
