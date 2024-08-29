@@ -71,9 +71,10 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            TAG=${CIRCLE_TAG:-${CIRCLE_SHA1:-latest}}
-            echo "Using Docker tag: $TAG"
-            ls
+            OLDTAG=$(cat ./app/VERSION)
+            echo "Current version is: $OLD_TAG"
+            TAG=$(echo $OLD_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+            echo "New version is: $TAG"
             docker build -t sagonzalezn/vagrant-node:$TAG ./app
       - run:
           name: Push Docker image to dockerhub
