@@ -65,10 +65,10 @@ jobs:
       - run:
           name: Deploy Containers to Vagrant Machine
           command: |
-            ssh -o StrictHostChecking=no vagrant@192.168.0.16 << 'EOF'
+            ssh -o StrictHostChecking=no vagrant@192.168.0.16 '
               docker compose -f /vagrant/docker-compose.yml pull
 
               docker compose -f /vagrant/docker-compose.yml up -d --build
-            EOF
+            '
 
   
