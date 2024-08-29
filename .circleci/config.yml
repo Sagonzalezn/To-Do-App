@@ -69,10 +69,22 @@ jobs:
           name: Install docker
           command: apk add docker
       - run:
+          name: Debug Information
+          command: |
+            # Check the contents of VERSION.txt and its format
+            echo "Listing files and their contents:"
+            ls -la
+            cat VERSION.txt || echo "VERSION.txt file is missing or empty"
+      - run:
           name: Build Docker image
           command: |
             TAG=$(cat VERSION.txt)
             echo "New version is: $TAG"
+            if [[ -z "$TAG" || "$TAG" =~ [^a-zA-Z0-9._-] ]]; then
+              echo "Invalid Docker tag format: $TAG"
+              exit 1
+            fi
+            # Build the Docker image
             docker build -t sagonzalezn/vagrant-node:$TAG ./app
       - run:
           name: Push Docker image to dockerhub
