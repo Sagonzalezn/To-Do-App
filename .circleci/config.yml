@@ -74,7 +74,7 @@ jobs:
             TAG=${CIRCLE_TAG:-${CIRCLE_SHA1:-latest}}
             echo "Using Docker tag: $TAG"
             ls
-            docker build -t sagonzalezn/vagrant-node:$TAG .
+            docker build -t sagonzalezn/vagrant-node:$TAG ./app
       - run:
           name: Push Docker image to dockerhub
           command: |
