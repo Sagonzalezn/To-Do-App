@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            OLDTAG=$(cat VERSION)
+            OLDTAG=$(cat VERSION.txt)
             echo "Current version is: $OLD_TAG"
             TAG=$(echo $OLD_VERSION | awk -F. -v OFS=. '{$NF++;print}')
             echo "New version is: $TAG"
