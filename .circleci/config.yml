@@ -65,7 +65,7 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Install docker
-          command: apt-get update && apt-get install docker
+          command: apk add docker
       - run:
           name: Build Docker image
           command: docker build -t sagonzalezn/vagrant-node:${CIRCLE_TAG} node:12-alpine
