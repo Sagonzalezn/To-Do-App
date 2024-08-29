@@ -12,6 +12,7 @@ workflows:
   build_test:
     jobs:
       - build_and_test
+      - runner-test
       - push:
           context: env #contexto para variables de entorno
           requires:
@@ -93,6 +94,12 @@ jobs:
             docker push sagonzalezn/vagrant-node:1.1.3
             docker tag sagonzalezn/vagrant-node:1.1.3 sagonzalezn/vagrant-node:latest
             docker push sagonzalezn/vagrant-node:latest
+
+  runner-test:
+    machine: true
+    resource_class: run/test3
+    steps:
+      - run: echo "Hi I'm on Runners!"
   
   deploy:
     docker:
