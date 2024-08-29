@@ -1,7 +1,16 @@
 version: 2.1
 
+on:
+  push:
+    branches:
+      - main
+      - feature/Demo
+    pull_request:
+      - main
+
+
 workflows:
-  build_test_deploy:
+  build_test:
     jobs:
       - build_and_test:
           context: env #contexto para variables de entorno
@@ -15,6 +24,15 @@ workflows:
                 - main
     jobs:
       - build_and_test
+  build_and_deploy:
+    jobs:
+      - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: main
 
 jobs:
   build_and_test:
@@ -34,6 +52,23 @@ jobs:
           name: Run tests
           command: cd app &&  yarn test
       - run:
-          name: Run Commit Command
-          command: echo "commiting changes"
+          name: Run Confirmation Message
+          command: echo "All tests passed :D"
+  
+  deploy:
+    docker:
+      image: circleci/python:3.8
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:F09I/es6VVTMxbQW01Ifa4vkYlk5EOd56pjzrosmuh8"
+      - run:
+          name: Deploy Containers to Vagrant Machine
+          command: |
+            ssh -o StrictHostChecking=no vagrant@192.168.0.16 << 'EOF'
+              docker compose -f /vagrant/docker-compose.yml pull
+
+              docker compose -f /vagrant/docker-compose.yml up -d --build
+            EOF
+
   
