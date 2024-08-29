@@ -65,6 +65,7 @@ jobs:
       - run:
           name: Deploy Containers to Vagrant Machine
           command: |
+            apt update
             apt install openssh-client
             ssh -o StrictHostChecking=no vagrant@192.168.0.16 '
               docker compose -f /vagrant/docker-compose.yml pull
