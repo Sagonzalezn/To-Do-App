@@ -5,14 +5,15 @@ on:
     branches:
       - main
       - feature/Demo
+      - develop
     pull_request:
       - main
+      - develop
 
 workflows:
   build_test:
     jobs:
       - build_and_test
-      - runner-test
       - push:
           context: env #contexto para variables de entorno
           requires:
@@ -31,15 +32,23 @@ workflows:
                 - main
     jobs:
       - build_and_test
-  #build_and_deploy:
-  #  jobs:
-  #    - build_and_test
-  #    - deploy:
-  #        requires:
-  #          - build_and_test
-  #        filters:
-  #          branches:
-  #            only: main
+  
+  production:
+    jobs:
+      - build_and_test:
+          filters: 
+              branches:
+                only:
+                  - main
+              tags:
+                only: /^v.*/
+      - runner-deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only:
+                - main
 
 jobs:
   build_and_test:
@@ -80,6 +89,7 @@ jobs:
           name: Build Docker image
           command: |
             TAG=$(cat VERSION.txt)
+            #TAG=$(CIRCLE_TAG)
             echo "New version is: $TAG"
             if [[ -z "$TAG" || "$TAG" =~ [^a-zA-Z0-9._-] ]]; then
               echo "Invalid Docker tag format: $TAG"
@@ -91,19 +101,13 @@ jobs:
           name: Push Docker image to dockerhub
           command: |
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-            docker push sagonzalezn/vagrant-node:1.1.3
-            docker tag sagonzalezn/vagrant-node:1.1.3 sagonzalezn/vagrant-node:latest
+            docker push sagonzalezn/vagrant-node:1.1.4
+            docker tag sagonzalezn/vagrant-node:1.1.4 sagonzalezn/vagrant-node:latest
             docker push sagonzalezn/vagrant-node:latest
 
-  runner-test:
+  runner-deploy:
     machine: true
     resource_class: run/test3
-    steps:
-      - run: echo "Hi I'm on Runners!"
-  
-  deploy:
-    docker:
-      - image: ubuntu:latest
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -111,14 +115,7 @@ jobs:
       - run:
           name: Deploy Containers to Vagrant Machine
           command: |
-            apt update
-            apt install openssh-client -y
-            apt install net-tools
-            ifconfig
-            ssh -o StrictHostKeyChecking=no vagrant@$SSH_CONNECTION '
-              docker compose -f /vagrant/docker-compose.yml pull
-
-              docker compose -f /vagrant/docker-compose.yml up -d --build
-            '
+            docker compose -f /vagrant/docker-compose.yaml pull
+            docker compose -f /vagrant/docker-compose.yaml up -d --build
 
   
