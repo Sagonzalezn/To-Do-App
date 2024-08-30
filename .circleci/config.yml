@@ -5,8 +5,10 @@ on:
     branches:
       - main
       - feature/Demo
+      - develop
     pull_request:
       - main
+      - develop
 
 workflows:
   build_test:
@@ -99,7 +101,21 @@ jobs:
     machine: true
     resource_class: run/test3
     steps:
-      - run: echo "Hi I'm on Runners!"
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:F09I/es6VVTMxbQW01Ifa4vkYlk5EOd56pjzrosmuh8"
+      - run:
+          name: Deploy Containers to Vagrant Machine
+          command: |
+            apt update
+            apt install openssh-client -y
+            apt install net-tools
+            ifconfig
+            ssh -o StrictHostKeyChecking=no vagrant@$SSH_CONNECTION '
+              docker compose -f /vagrant/docker-compose.yml pull
+
+              docker compose -f /vagrant/docker-compose.yml up -d --build
+            '
   
   deploy:
     docker:
