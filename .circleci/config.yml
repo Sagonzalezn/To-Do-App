@@ -96,7 +96,7 @@ jobs:
               exit 1
             fi
             # Build the Docker image
-            docker build -t sagonzalezn/vagrant-node:${TAG} ./app
+            docker build -t sagonzalezn/vagrant-node:1.2.0 ./app
       - run:
           name: Push Docker image to dockerhub
           command: |
