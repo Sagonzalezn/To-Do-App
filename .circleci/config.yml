@@ -33,15 +33,6 @@ workflows:
                 - main
     jobs:
       - build_and_test
-  #build_and_deploy:
-  #  jobs:
-  #    - build_and_test
-  #    - deploy:
-  #        requires:
-  #          - build_and_test
-  #        filters:
-  #          branches:
-  #            only: main
 
 jobs:
   build_and_test:
@@ -109,25 +100,5 @@ jobs:
           command: |
             docker compose -f /vagrant/docker-compose.yaml pull
             docker compose -f /vagrant/docker-compose.yaml up -d --build
-  
-  deploy:
-    docker:
-      - image: ubuntu:latest
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "SHA256:F09I/es6VVTMxbQW01Ifa4vkYlk5EOd56pjzrosmuh8"
-      - run:
-          name: Deploy Containers to Vagrant Machine
-          command: |
-            apt update
-            apt install openssh-client -y
-            apt install net-tools
-            ifconfig
-            ssh -o StrictHostKeyChecking=no vagrant@$SSH_CONNECTION '
-              docker compose -f /vagrant/docker-compose.yml pull
-
-              docker compose -f /vagrant/docker-compose.yml up -d --build
-            '
 
   
