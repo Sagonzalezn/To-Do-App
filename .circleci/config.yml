@@ -101,4 +101,3 @@ jobs:
             docker compose -f /vagrant/docker-compose.yaml pull
             docker compose -f /vagrant/docker-compose.yaml up -d --build
 
-  
